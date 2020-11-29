@@ -1,21 +1,23 @@
 from pymongo import MongoClient
+from helper import constants
 
-
-client = MongoClient("mongodb://127.0.0.1:27017")
-
+client = MongoClient(constants.DB_ENDPOINT)
 
 db = client.notes
 
 notes_table = db.notes
 
-cursor = notes_table.find({})
 
-for document in cursor:
-      print(document)
+def get_notes():
+      cursor = notes_table.find({})
 
+      notes = []
 
-#
-# entry = {"title": "new note 2", "content": "chen liu is good"}
-#
-#
-# notes_table.insert_one(entry)
+      for document in cursor:
+            title = document["title"]
+            content = document["content"]
+            note = {"title": title, "content": content}
+            notes.append(note)
+
+      return notes
+

@@ -1,31 +1,18 @@
 from flask import Flask
-from pymongo import MongoClient
+from helper import util
+import db
 
 
 app = Flask(__name__)
 
 
-@app.route('/notes')
-def get_notes():
-    client = MongoClient("mongodb://127.0.0.1:27017")
+@app.route('/notes', methods=['GET'])
+def _get_notes():
+    """
+    GET /notes
+    - No request body
+    - return the existing notes
+    """
+    notes = db.get_notes()
+    return {"notes": notes}, 200
 
-    db = client.notes
-
-    notes_table = db.notes
-
-    cursor = notes_table.find({})
-
-    notes = []
-
-    for document in cursor:
-        title = document["title"]
-        content = document["content"]
-        note = {"title": title, "content": content}
-        notes.append(note)
-
-    return {"notes": notes}
-
-
-
-if __name__ == '__main__':
-    app.run()
