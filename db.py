@@ -26,3 +26,15 @@ def get_notes():
         notes.append(note)
 
     return notes
+
+
+def add_note(title, content):
+    entry = {'title': title, 'content': content}
+    object_id = notes_table.insert_one(entry).inserted_id
+    new_note = {
+        'title': title,
+        'content': content,
+        'id': str(object_id)
+    }
+
+    return new_note
